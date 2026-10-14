@@ -1,0 +1,62 @@
+{
+  "run_date": "2026-10-13",
+  "shop_date": "2026-08-31",
+  "model": "gpt-6-luna (Portkey)",
+  "database": "data/campus_customs_new.db, reset to the original before the runs",
+  "checking_start": 3400.0,
+  "checking_end": 152.0,
+  "tickets": [
+    {
+      "id": 101,
+      "run_id": "2c5cdd283558",
+      "final_status": "resolved",
+      "outcome": "Tee in size S is out of stock and its vendor was blocked by overdue invoice 501. The Boss proposed paying the invoice ($840) and restocking 1 tee ($8); a customer reply was drafted, not sent.",
+      "agent_contributions": {
+        "boss": "Read the ticket, marked it in progress, called Inventory, Accounting, and Customer Service, checked cash, and decided to pay invoice 501 before restocking. A self-delegation attempt was blocked by the safety rule.",
+        "inventory": "check_inventory found 0 on hand (short 1); list_vendors picked Bulldog Print Co; draft_purchase_order for 1 tee at $8, earliest arrival 2026-09-05, blocked by invoice 501.",
+        "accounting": "check_invoices confirmed invoice 501 is open and overdue ($840, due 2026-08-28) and tied to this tee reprint.",
+        "customer_service": "Saved draft #1 to Tauhid Zaman saying size S is unavailable and a restock is in progress. Not sent; no internal details shared.",
+        "facilities": "Not involved."
+      },
+      "human_approvals": [
+        {"approval_id": 1, "kind": "invoice", "ref_id": 501, "payee": "Bulldog Print Co", "amount": 840.0, "status": "approved", "approved_by": "Maggie Friel", "checking_before": 3400.0, "checking_after": 2560.0},
+        {"approval_id": 2, "kind": "purchase_order", "ref_id": 1, "item": "1 x CC-TEE-WHITE S", "payee": "Bulldog Print Co", "amount": 8.0, "status": "approved", "approved_by": "Maggie Friel", "checking_before": 2560.0, "checking_after": 2552.0}
+      ],
+      "tokens": 26251
+    },
+    {
+      "id": 102,
+      "run_id": "d0f5915d1d5d",
+      "final_status": "resolved",
+      "outcome": "Rent notice matches lease 1: $2,400 to Elm City Properties, due 2026-09-02 (2 days out). Payment was prepared for approval and approved; next due moved to 2026-10-02.",
+      "agent_contributions": {
+        "boss": "Read the ticket, marked it in progress, sent it to Facilities, and approved the plan to send rent for human approval.",
+        "facilities": "check_rent_due confirmed $2,400 due 2026-09-02 and that the notice matches the lease; asked Accounting to prepare the payment.",
+        "accounting": "prepare_payment for rent on lease 1: $2,400, enough cash, nothing paid.",
+        "inventory": "Not involved.",
+        "customer_service": "Not involved (the landlord is not a customer and nothing is sent)."
+      },
+      "human_approvals": [
+        {"approval_id": 3, "kind": "rent", "ref_id": 1, "payee": "Elm City Properties", "amount": 2400.0, "status": "approved", "approved_by": "Maggie Friel", "checking_before": 2552.0, "checking_after": 152.0}
+      ],
+      "tokens": 12486
+    },
+    {
+      "id": 103,
+      "run_id": "ee7766b1ab77",
+      "final_status": "resolved",
+      "outcome": "Boss offered a 20% bulk discount: $46.40 each, $928 for 20 hoodies (above the $22 cost). 8 are in stock; a 12-hoodie restock ($264) was proposed but not approved because only $152 remained after the invoice and rent.",
+      "agent_contributions": {
+        "boss": "Read the ticket, marked it in progress, called Accounting, Inventory (twice), and Customer Service, checked cash, and chose the 20% discount.",
+        "accounting": "evaluate_bulk_discount for 0/5/10/15/20% on 20 hoodies; no option below cost.",
+        "inventory": "check_inventory found 8 on hand (short 12); list_vendors and draft_purchase_order for 12 at $22 = $264, earliest arrival 2026-09-05, blocked by invoice 501.",
+        "customer_service": "Saved draft #2 to Yale AI Club with the $46.40 / $928 offer and that the full order depends on a restock. Not sent.",
+        "facilities": "Not involved."
+      },
+      "human_approvals": [
+        {"approval_id": 4, "kind": "purchase_order", "ref_id": 1, "item": "12 x CC-HOOD-NAVY M", "payee": "Bulldog Print Co", "amount": 264.0, "status": "pending", "approved_by": null, "note": "Not approved: checking had $152, less than $264. The approve route would refuse it rather than go negative."}
+      ],
+      "tokens": 35488
+    }
+  ]
+}

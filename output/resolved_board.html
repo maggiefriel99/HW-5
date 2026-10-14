@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Campus Customs — Resolved Board</title>
+<style>
+  body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #0a2240; color: #fff; }
+  header { padding: 22px 32px; border-bottom: 2px solid #fff; }
+  header h1 { margin: 0; font-size: 26px; }
+  header p { margin: 6px 0 0; color: #b9c6da; font-size: 14px; }
+  main { padding: 24px 32px; max-width: 1200px; }
+  .totals { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px; }
+  .total { background: #fff; color: #0a2240; border-radius: 14px; padding: 14px 18px; min-width: 180px; }
+  .total span { display: block; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #45556e; }
+  .total b { font-size: 30px; }
+  .ticket { background: #0f2d54; border: 1px solid rgba(255,255,255,.16); border-radius: 18px; padding: 20px; margin-bottom: 26px; }
+  .ticket h2 { margin: 0 0 4px; font-size: 22px; }
+  .badge { display: inline-block; background: #4fd18b; color: #032312; font-size: 11px; font-weight: 800;
+           text-transform: uppercase; letter-spacing: 1px; padding: 3px 9px; border-radius: 999px; margin-left: 8px; vertical-align: middle; }
+  .outcome { color: #e4ebf5; line-height: 1.5; margin: 8px 0 6px; }
+  .approvals { font-size: 14px; color: #b9c6da; margin: 0 0 14px; }
+  .shots { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  figure { margin: 0; }
+  figure img { width: 100%; border-radius: 12px; border: 2px solid #fff; display: block; }
+  .slot { border: 2px dashed rgba(255,255,255,.35); border-radius: 12px; min-height: 190px; display: grid; place-items: center;
+          text-align: center; padding: 16px; color: #b9c6da; font-size: 13px; }
+  .slot code { color: #fff; background: rgba(255,255,255,.12); padding: 2px 6px; border-radius: 4px; }
+  figcaption { font-size: 13px; color: #b9c6da; margin-top: 6px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Campus Customs — Resolved Board</h1>
+  <p>Screenshots of the React Dan Ops Board for each ticket. Save each screenshot into <code>output/screenshots/</code> with the file name shown in its box, then refresh this page.</p>
+</header>
+<main>
+  <div class="totals">
+    <div class="total"><span>Starting checking</span><b>$3,400.00</b></div>
+    <div class="total"><span>Approved out</span><b>−$3,248.00</b></div>
+    <div class="total"><span>Ending checking</span><b>$152.00</b></div>
+    <div class="total"><span>Tickets resolved</span><b>3 / 3</b></div>
+  </div>
+
+  <section class="ticket">
+    <h2>#101 · Bulldog tee for Tauhid Zaman <span class="badge">resolved</span></h2>
+    <p class="outcome">Size S was out of stock, and the vendor was blocked by overdue invoice 501. The Boss proposed paying the $840 invoice and restocking 1 tee for $8. The reply to Tauhid is a draft and was not sent.</p>
+    <p class="approvals">Approved: invoice 501, $840.00 · 1-tee restock, $8.00</p>
+    <div class="shots" data-ticket="101"></div>
+  </section>
+
+  <section class="ticket">
+    <h2>#102 · Rent notice from Elm City Properties <span class="badge">resolved</span></h2>
+    <p class="outcome">Facilities confirmed $2,400 is due 2026-09-02 on lease 1, and Accounting prepared the payment. After approval, the next rent due date moved to 2026-10-02.</p>
+    <p class="approvals">Approved: rent, $2,400.00</p>
+    <div class="shots" data-ticket="102"></div>
+  </section>
+
+  <section class="ticket">
+    <h2>#103 · Bulk hoodies for Yale AI Club <span class="badge">resolved</span></h2>
+    <p class="outcome">The Boss offered 20% off: $46.40 each, $928 for 20. 8 are in stock, and the 12-hoodie restock ($264) stays pending because only $152 was left after the invoice and rent.</p>
+    <p class="approvals">Pending: 12-hoodie restock, $264.00 (not enough cash)</p>
+    <div class="shots" data-ticket="103"></div>
+  </section>
+
+  <section class="ticket">
+    <h2>Cash &amp; approvals panel</h2>
+    <p class="outcome">The money column after the approvals: $3,400.00 − $840.00 − $8.00 − $2,400.00 = $152.00.</p>
+    <div class="shots" data-ticket="cash"></div>
+  </section>
+</main>
+<script>
+  // One screenshot per ticket (ticket-<id>-1.png). Extra ones (-2, -3) appear only if the files exist.
+  document.querySelectorAll(".shots").forEach(box => {
+    const t = box.dataset.ticket;
+    [1, 2, 3].forEach(n => {
+      const name = t === "cash" ? `cash-${n}.png` : `ticket-${t}-${n}.png`;
+      const fig = document.createElement("figure");
+      const slot = document.createElement("div");
+      slot.className = "slot";
+      slot.innerHTML = `Add screenshot<br><code>output/screenshots/${name}</code>`;
+      const cap = document.createElement("figcaption");
+      cap.textContent = t === "cash" ? "Cash and approvals panel" : `React board, ticket #${t}` + (n > 1 ? ` (${n})` : "");
+      fig.append(slot, cap);
+      if (n === 1) box.append(fig);
+      const img = new Image();
+      img.src = `screenshots/${name}`;
+      img.alt = cap.textContent;
+      img.onload = () => { slot.replaceWith(img); if (n > 1) box.append(fig); };
+    });
+  });
+</script>
+</body>
+</html>

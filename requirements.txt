@@ -1,0 +1,9 @@
+# Python 3.12+ (built and tested on 3.14)
+# MCP server
+fastmcp>=4.1
+# Agent team (gpt-6-luna through Portkey's OpenAI-compatible API)
+pydantic-ai-slim[openai,mcp]>=2.55
+# Backend API
+fastapi>=0.143
+uvicorn[standard]>=0.54
+python-dotenv>=1.2

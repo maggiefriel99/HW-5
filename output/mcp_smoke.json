@@ -1,0 +1,74 @@
+{
+  "server": "campus-customs (mcp_server/server.py)",
+  "database": "data/campus_customs_new.db",
+  "connection_config": "mcp.json at the project root (renamed to .mcp.json in Problem 11)",
+  "transport": "stdio, launched from mcp.json and registered in Claude Code (status: Connected)",
+  "how_tested": "Claude Code (vibe coder) called each tool directly as mcp__campus-customs__<tool>, then queried data/campus_customs_new.db with SQL to compare",
+  "run_date": "2026-10-13",
+  "tools_listed": ["check_rent_due", "check_inventory", "evaluate_bulk_discount"],
+  "tests": [
+    {
+      "prompt": "For the check rent due tool, pull the results and make sure it matches what is in the leases in the database.",
+      "tool": "check_rent_due",
+      "arguments": {"lease_id": 1},
+      "tool_output": {
+        "lease_id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400.0,
+        "next_due": "2026-09-02",
+        "date_today": "2026-08-31",
+        "days_until_due": 2,
+        "overdue": false,
+        "checking_balance": 3400.0,
+        "enough_cash": true
+      },
+      "database_values": {
+        "leases": {"id": 1, "space_name": "Chapel Street shop", "landlord": "Elm City Properties", "monthly_rent": 2400.0, "next_due": "2026-09-02", "notes": null},
+        "desk": {"date_today": "2026-08-31"},
+        "cash_accounts": {"name": "checking", "balance": 3400.0, "date": "2026-08-31"}
+      },
+      "matches_database": true
+    },
+    {
+      "prompt": "For inventory, pick an item item, run the tool, and then see if the quantity matches what is in the database",
+      "tool": "check_inventory",
+      "arguments": {"sku": "CC-HOOD-NAVY", "size": "M", "qty_needed": 20},
+      "tool_output": {
+        "sku": "CC-HOOD-NAVY",
+        "items": [
+          {"sku": "CC-HOOD-NAVY", "name": "Basic Hoodie Big Yale", "size": "M", "qty": 8, "location": "Aisle A"}
+        ],
+        "qty_needed": 20,
+        "can_fill": false,
+        "shortfall": 12
+      },
+      "database_values": {
+        "inventory": {"sku": "CC-HOOD-NAVY", "name": "Basic Hoodie Big Yale", "size": "M", "qty": 8, "location": "Aisle A"}
+      },
+      "matches_database": true
+    },
+    {
+      "prompt": "for the bulk pricing tool, compare against the ectual tickt, report the out and report the potential options.",
+      "tool": "evaluate_bulk_discount",
+      "arguments": {"sku": "CC-HOOD-NAVY", "qty": 20, "discount_percents": [0, 10, 15, 20]},
+      "tool_output": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "options": [
+          {"discount_percent": 0.0, "unit_price": 58.0, "order_total": 1160.0, "profit_per_unit": 36.0, "total_profit": 720.0, "margin_percent": 62.1, "below_cost": false},
+          {"discount_percent": 10.0, "unit_price": 52.2, "order_total": 1044.0, "profit_per_unit": 30.2, "total_profit": 604.0, "margin_percent": 57.9, "below_cost": false},
+          {"discount_percent": 15.0, "unit_price": 49.3, "order_total": 986.0, "profit_per_unit": 27.3, "total_profit": 546.0, "margin_percent": 55.4, "below_cost": false},
+          {"discount_percent": 20.0, "unit_price": 46.4, "order_total": 928.0, "profit_per_unit": 24.4, "total_profit": 488.0, "margin_percent": 52.6, "below_cost": false}
+        ]
+      },
+      "database_values": {
+        "tickets": {"id": 103, "type": "price_override", "requester": "Yale AI Club", "subject": "Bulk hoodie discount", "sku": "CC-HOOD-NAVY", "size": "M", "qty": 20, "status": "open", "notes": "Student org wants 20 hoodies, size M, asking for a bulk discount."},
+        "pricing": {"sku": "CC-HOOD-NAVY", "unit_cost": 22.0, "list_price": 58.0}
+      },
+      "matches_database": true
+    }
+  ]
+}

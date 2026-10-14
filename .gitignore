@@ -1,0 +1,17 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Frontend
+node_modules/
+frontend/dist/
+
+# Temp and OS files
+*.json.tmp
+*.db-journal
+*.zip
+.DS_Store
